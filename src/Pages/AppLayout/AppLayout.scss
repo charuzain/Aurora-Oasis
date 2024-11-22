@@ -1,0 +1,23 @@
+.container{
+  background-color: red;
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  grid-template-rows: 1fr 4fr;
+  // gap: 1rem;
+height: 100vh;
+
+border:10px solid black;
+}
+
+.navbar{
+  background-color: yellow;
+  grid-row: 1/-1;
+}
+
+.aside{
+  background-color: orange;
+}
+
+.main{
+  background-color: purple;
+}

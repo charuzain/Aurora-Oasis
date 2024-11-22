@@ -1,14 +1,15 @@
 import { Outlet } from 'react-router-dom';
+import './AppLayout.scss'
 
 const AppLayout = () => {
   return (
-    <>
-      <nav>Navbar</nav>
-      <aside>SideBar</aside>
-      <main>
+    <div className='container'>
+      <nav className='navbar'>Navbar</nav>
+      <aside className='aside'>SideBar</aside>
+      <main className='main'>
         <Outlet />
       </main>
-    </>
+    </div>
   );
 };
 

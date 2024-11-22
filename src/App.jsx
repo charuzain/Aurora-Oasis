@@ -30,10 +30,6 @@ function App() {
           element: <Cabins />,
         },
         {
-          path: 'dashboard',
-          element: <Dashboard />,
-        },
-        {
           path: 'users',
           element: <Users />,
         },
