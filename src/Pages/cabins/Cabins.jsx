@@ -1,8 +1,17 @@
-
+import { useEffect } from 'react';
+import { getCabins } from '../../services/apiCabins';
 const Cabins = () => {
-  return (
-    <div>Cabins</div>
-  )
+
+  const fetchCabin = async () => {
+    const result = await getCabins();
+    console.log(result)
 }
 
-export default Cabins
+  useEffect(() => {
+    fetchCabin()
+  }, []);
+
+  return <div>Cabins</div>;
+};
+
+export default Cabins;
