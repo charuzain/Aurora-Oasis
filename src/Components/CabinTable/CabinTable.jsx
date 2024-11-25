@@ -1,6 +1,7 @@
 import './CabinTable.scss';
-import { useQuery } from '@tanstack/react-query';
-import { getCabins } from '../../services/apiCabins';
+import { useMutation, useQuery,useQueryClient } from '@tanstack/react-query';
+import { getCabins, deleteCabin } from '../../services/apiCabins';
+
 
 const CabinTable = () => {
   const fetchCabins = async () => {
@@ -8,10 +9,9 @@ const CabinTable = () => {
       const result = await getCabins();
       return result;
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
-    
   };
   // Queries
   const {
@@ -22,12 +22,27 @@ const CabinTable = () => {
   } = useQuery({
     queryKey: ['cabins'],
     queryFn: fetchCabins,
+    
   });
-  
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (id) => deleteCabin(id),
+    onSuccess: () => {
+      alert("Cabin deleted successfully")
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+    },
+    onError: (error) => {
+      alert(error)
+      console.error('Error deleting cabin:', error);
+    },
+  });
+
   if (isPending) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
-  console.log(cabins[0]);
   return (
     <>
       <div className="header">
@@ -38,19 +53,18 @@ const CabinTable = () => {
         <div>Discount</div>
         <div></div>
       </div>
-      <div>
-        {cabins.map((cabin) => (
-          <div key={cabin.id}>
-            <div>
-              <img src={cabin.image} alt={cabin.name} width={'95px'} />
-            </div>
-            <p>{cabin.name}</p>
-            <p>{cabin.maxCapacity}</p>
-            <p>{cabin.regularPrice}</p>
-            <p>{cabin.discount}</p>
-          </div>
-        ))}
-      </div>
+      {cabins.map((cabin) => (
+        <div key={cabin.id} className="row">
+          <img src={cabin.image} alt={cabin.name} />
+          <p>{cabin.name}</p>
+          <p>Fits upto {cabin.maxCapacity} guests</p>
+          <p>{cabin.regularPrice}</p>
+          <p>{cabin.discount}</p>
+          <button onClick={() => {
+            mutation.mutate(cabin.id)
+          }}>Delete</button>
+        </div>
+      ))}
 
       {/* <CabinTableHeader />
       <CabinRow/> */}
