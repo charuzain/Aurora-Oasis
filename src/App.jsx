@@ -7,6 +7,7 @@ import Users from './Pages/users/Users';
 import Settings from './Pages/settings/Settings';
 import AppLayout from './Pages/AppLayout/AppLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const router = createBrowserRouter([
@@ -47,7 +48,25 @@ function App() {
   ]);
 const queryClient = new QueryClient();
   return (
-     <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <Toaster
+        position="top-center"
+        gutter={8}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+
+          success: {
+            theme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+        }}
+      />
       <RouterProvider router={router} />
     </QueryClientProvider>
   );

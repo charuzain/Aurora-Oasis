@@ -5,3 +5,4 @@ This app is designed to make daily hotel operations simple and smooth for the st
 
 
 npm i react-icons
+npm install react-hot-toast
