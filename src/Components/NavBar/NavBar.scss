@@ -5,7 +5,7 @@
   }
 
   &__image {
-    height: 10rem;
+    height: 12rem;
     width: 100%;
   }
 
@@ -20,16 +20,17 @@
   }
 
   &__item{
-    border:1px solid purple;
-    width: 100%;
+    width: 90%;
     
   }
 
   &__link{
     display: flex;
     gap:0.5rem;
-    border:1px solid green;
+    // border:1px solid green;
     align-items: center;
+    padding:0.5rem;
+    cursor: pointer;
     // justify-content: center;
   }
 }

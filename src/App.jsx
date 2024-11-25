@@ -6,6 +6,7 @@ import Login from './Pages/Login/Login';
 import Users from './Pages/users/Users';
 import Settings from './Pages/settings/Settings';
 import AppLayout from './Pages/AppLayout/AppLayout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
   const router = createBrowserRouter([
@@ -44,11 +45,11 @@ function App() {
       element: <Login />,
     },
   ]);
-
+const queryClient = new QueryClient();
   return (
-    <>
+     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </>
+    </QueryClientProvider>
   );
 }
 
