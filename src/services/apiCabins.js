@@ -27,7 +27,7 @@ export const AddNewCabin = async (newCabin) => {
     .select();
   if (error) {
     console.error(error);
-    throw new Error('Cabin could not be deleted');
+    throw new Error('Cabin could not be created');
   }
   return data;
 };

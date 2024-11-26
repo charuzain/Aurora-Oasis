@@ -6,33 +6,35 @@ import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
 const CabinForm = () => {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState,reset,getValues } = useForm();
   const queryClient = useQueryClient();
+ 
   const mutation = useMutation({
     mutationFn: AddNewCabin,
     onSuccess: () => {
-      toast.success("New cabin added succesfully !")
-      queryClient.invalidateQueries({queryKey:["cabins"]})
-    },
-    onError: () => {
-      toast.error("Encounter an error while addign new cabin")
-    }
-  })
+      toast.success('New cabin added succesfully !');
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset()
 
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  console.log(mutation)
 
   const submitHandler = (data) => {
     console.log(data)
-    mutation.mutate(data)
-    // add cabin to db 
-    // form reset
-  }
+    console.log(getValues())
+    mutation.mutate(data);
+  };
 
   const error = formState.errors;
   const onErrors = (errors) => {
-    
     console.error(errors);
-    // toast.error("Encounter an error while adding new cabin")
-  }
+  };
+
   return (
     <form onSubmit={handleSubmit(submitHandler, onErrors)}>
       <div>
@@ -71,9 +73,13 @@ const CabinForm = () => {
         <input
           type="number"
           id="discount"
-          {...register('discount', { required: 'Discount is required' })}
+          {...register('discount', {
+            required: 'Discount is required',
+            validate : (value) => value <= getValues().regularPrice|| "Discount cant be greater than regular price"
+          }
+          )}
         />
-        {error?.discount && error.discount.message}
+        {error?.discount && <p>{error.discount.message}</p>}
       </div>
       <div>
         <label htmlFor="description">Description</label>
@@ -89,7 +95,7 @@ const CabinForm = () => {
       </div>
       <div>
         <button type="reset">Cancel</button>
-        <button type="submit">Create New Cabin</button>
+        <button type="submit" disabled={mutation.isPending}>Create New Cabin</button>
       </div>
     </form>
   );
