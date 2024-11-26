@@ -1,9 +1,22 @@
 import { useForm } from 'react-hook-form';
 import './CabinForm.scss';
+import { useMutation } from '@tanstack/react-query';
+import { AddNewCabin } from '../../services/apiCabins';
 
 const CabinForm = () => {
   const { register, handleSubmit, formState } = useForm();
-  const submitHandler = (data) => console.log(data);
+  const mutation = useMutation({
+    mutationFn:AddNewCabin
+  })
+
+
+  const submitHandler = (data) => {
+    console.log(data)
+    mutation.mutate(data)
+    // add cabin to db 
+    // form reset
+  }
+
   const error = formState.errors;
   // const onErrors = (errors) => console.error(errors);
   return (
