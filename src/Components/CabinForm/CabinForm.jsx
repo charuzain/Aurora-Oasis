@@ -1,27 +1,30 @@
+import { useForm } from 'react-hook-form';
 import './CabinForm.scss';
 
 const CabinForm = () => {
+  const { register, handleSubmit } = useForm()
+  const submitHandler = data => console.log(data)
   return (
-    <form>
+    <form onSubmit={handleSubmit(submitHandler)}>
       <div>
-        <label htmlFor="">Cabin name</label>
-        <input type="text" />
+        <label htmlFor="name">Cabin name</label>
+        <input type="text" id="name" {...register('name')} />
       </div>
       <div>
-        <label htmlFor="">Maximum capacity</label>
-        <input type="number" />
+        <label htmlFor="maxCapacity">Maximum capacity</label>
+        <input type="number" id="maxCapacity" {...register('maxCapacity')} />
       </div>
       <div>
-        <label htmlFor="">Regular price</label>
-        <input type="number" />
+        <label htmlFor="regularPrice">Regular price</label>
+        <input type="number" id="regularPrice" {...register('regularPrice')} />
       </div>
       <div>
-        <label htmlFor="">Discount</label>
-        <input type="number" />
+        <label htmlFor="discount">Discount</label>
+        <input type="number" id="discount" {...register('discount')} />
       </div>
       <div>
-        <label htmlFor="">Description</label>
-        <input type="text" />
+        <label htmlFor="description">Description</label>
+        <textarea id="description" {...register('description')}></textarea>
       </div>
       <div>
         <label htmlFor="">Cabin photo</label>
@@ -29,7 +32,7 @@ const CabinForm = () => {
       </div>
       <div>
         <button type="reset">Cancel</button>
-        <button type='submit'>Create New Cabin</button>
+        <button type="submit">Create New Cabin</button>
       </div>
     </form>
   );

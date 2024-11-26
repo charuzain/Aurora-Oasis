@@ -9,7 +9,7 @@ const AddCabin = () => {
   return (
     <div>
       <button onClick={addCabinHandler}>AddCabin</button>
-      {showForm && <p><CabinForm/></p>}
+      {showForm && <CabinForm/>}
     </div>
   );
 };
