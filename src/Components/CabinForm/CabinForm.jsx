@@ -2,11 +2,21 @@ import { useForm } from 'react-hook-form';
 import './CabinForm.scss';
 import { useMutation } from '@tanstack/react-query';
 import { AddNewCabin } from '../../services/apiCabins';
+import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CabinForm = () => {
   const { register, handleSubmit, formState } = useForm();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn:AddNewCabin
+    mutationFn: AddNewCabin,
+    onSuccess: () => {
+      toast.success("New cabin added succesfully !")
+      queryClient.invalidateQueries({queryKey:["cabins"]})
+    },
+    onError: () => {
+      toast.error("Encounter an error while addign new cabin")
+    }
   })
 
 
@@ -18,9 +28,13 @@ const CabinForm = () => {
   }
 
   const error = formState.errors;
-  // const onErrors = (errors) => console.error(errors);
+  const onErrors = (errors) => {
+    
+    console.error(errors);
+    // toast.error("Encounter an error while adding new cabin")
+  }
   return (
-    <form onSubmit={handleSubmit(submitHandler)}>
+    <form onSubmit={handleSubmit(submitHandler, onErrors)}>
       <div>
         <label htmlFor="name">Cabin name</label>
         <input
