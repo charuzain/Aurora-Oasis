@@ -6,27 +6,28 @@ import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
 const CabinForm = () => {
-  const { register, handleSubmit, formState,reset,getValues } = useForm();
+  const { register, handleSubmit, formState, reset, getValues } = useForm();
   const queryClient = useQueryClient();
- 
+
   const mutation = useMutation({
     mutationFn: AddNewCabin,
     onSuccess: () => {
       toast.success('New cabin added succesfully !');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset()
-
+      reset();
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  console.log(mutation)
+  // console.log(mutation);
 
   const submitHandler = (data) => {
+    console.log("----------")
     console.log(data)
-    console.log(getValues())
+    // console.log(data.image[0].name);
+    // console.log(getValues());
     mutation.mutate(data);
   };
 
@@ -53,7 +54,9 @@ const CabinForm = () => {
         <input
           type="number"
           id="maxCapacity"
-          {...register('maxCapacity', { required: 'Max capacity is required' })}
+          {...register('maxCapacity', {
+            required: 'Max capacity is required',
+          })}
         />
         {error?.maxCapacity && error.maxCapacity.message}
       </div>
@@ -75,9 +78,10 @@ const CabinForm = () => {
           id="discount"
           {...register('discount', {
             required: 'Discount is required',
-            validate : (value) => value <= getValues().regularPrice|| "Discount cant be greater than regular price"
-          }
-          )}
+            validate: (value) => {
+              value <= getValues().regularPrice ||
+              'Discount cant be greater than regular price'}
+          })}
         />
         {error?.discount && <p>{error.discount.message}</p>}
       </div>
@@ -90,12 +94,17 @@ const CabinForm = () => {
         {error?.description && error.description.message}
       </div>
       <div>
-        <label htmlFor="">Cabin photo</label>
-        <input type="file" />
+        <label htmlFor="image">Cabin photo</label>
+        <input type="file" accept="image/*" id="image" {...register('image', {
+          required:"Image is required"
+        })} />
+        {error?.image && <p>{error.image.message}</p>}
       </div>
       <div>
         <button type="reset">Cancel</button>
-        <button type="submit" disabled={mutation.isPending}>Create New Cabin</button>
+        <button type="submit" disabled={mutation.isPending}>
+          Create New Cabin
+        </button>
       </div>
     </form>
   );
