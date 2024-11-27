@@ -1,6 +1,5 @@
 import supabase from './dbConnection';
 
-
 export const getCabins = async () => {
   let { data, error } = await supabase.from('cabins').select('*');
   if (error) {
@@ -22,7 +21,6 @@ export const deleteCabin = async (id) => {
 };
 
 export const AddNewCabin = async (newCabin) => {
-
   const imageName = `${Math.random()}-${newCabin.image[0].name}`;
   const imagePath = `https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images/${imageName}`;
 
@@ -50,3 +48,16 @@ export const AddNewCabin = async (newCabin) => {
   return data;
 };
 
+export const editCabin = async (newCabin, id) => {
+  const { data, error } = await supabase
+    .from('cabins')
+    .update({ newCabin })
+    .eq('id', id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error('Cabin could not be updated');
+  }
+  return data;
+};

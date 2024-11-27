@@ -1,10 +1,11 @@
 import './CabinTable.scss';
-import { useMutation, useQuery,useQueryClient } from '@tanstack/react-query';
-import { getCabins, deleteCabin } from '../../services/apiCabins';
-import toast from 'react-hot-toast';
+import {useQuery} from '@tanstack/react-query';
+import { getCabins} from '../../services/apiCabins';
+import Cabin from '../Cabin/Cabin';
 
 
 const CabinTable = () => {
+ 
   const fetchCabins = async () => {
     try {
       const result = await getCabins();
@@ -17,7 +18,6 @@ const CabinTable = () => {
   // Queries
   const {
     isPending,
-    // isError,
     data: cabins,
     error,
   } = useQuery({
@@ -26,25 +26,12 @@ const CabinTable = () => {
     
   });
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: (id) => deleteCabin(id),
-    onSuccess: () => {
- 
-      toast.success('Cabin deleted successfully');
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-    },
-    onError: (error) => {
-      toast.error(error.message)
-      console.error('Error deleting cabin:', error);
-    },
-  });
 
   if (isPending) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
+ 
+ 
   return (
     <>
       <div className="header">
@@ -55,21 +42,7 @@ const CabinTable = () => {
         <div>Discount</div>
         <div></div>
       </div>
-      {cabins.map((cabin) => (
-        <div key={cabin.id} className="row">
-          <img src={cabin.image} alt={cabin.name} />
-          <p>{cabin.name}</p>
-          <p>Fits upto {cabin.maxCapacity} guests</p>
-          <p>{cabin.regularPrice}</p>
-          <p>{cabin.discount}</p>
-          <button onClick={() => {
-            mutation.mutate(cabin.id)
-          }}>Delete</button>
-        </div>
-      ))}
-
-      {/* <CabinTableHeader />
-      <CabinRow/> */}
+      {cabins.map((cabin) => <Cabin key={cabin.id} cabin={cabin} />)}
     </>
   );
 };
