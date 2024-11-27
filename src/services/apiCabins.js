@@ -21,6 +21,7 @@ export const deleteCabin = async (id) => {
 };
 
 export const AddNewCabin = async (newCabin) => {
+  console.log('add form');
   const imageName = `${Math.random()}-${newCabin.image[0].name}`;
   const imagePath = `https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images/${imageName}`;
 
@@ -48,10 +49,12 @@ export const AddNewCabin = async (newCabin) => {
   return data;
 };
 
-export const editCabin = async (newCabin, id) => {
+export const editCabin = async (newCabin) => {
+
+  const { id, ...newValue } = newCabin;
   const { data, error } = await supabase
     .from('cabins')
-    .update({ newCabin })
+    .update({...newValue })
     .eq('id', id)
     .select();
 

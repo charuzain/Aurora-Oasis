@@ -1,21 +1,20 @@
 import { useForm } from 'react-hook-form';
 import './CabinForm.scss';
 import { useMutation } from '@tanstack/react-query';
-import { AddNewCabin } from '../../services/apiCabins';
+import { AddNewCabin, editCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
 const CabinForm = ({ cabinToEdit = {} }) => {
-
-  const isEditState = Boolean(cabinToEdit.id)
+  const isEditState = Boolean(cabinToEdit.id);
 
   const { register, handleSubmit, formState, reset, getValues } = useForm({
-    defaultValues: isEditState ? cabinToEdit : {}
+    defaultValues: isEditState ? cabinToEdit : {},
   });
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: AddNewCabin,
+    mutationFn: isEditState ? editCabin : AddNewCabin,
     onSuccess: () => {
       toast.success('New cabin added succesfully !');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
@@ -27,7 +26,9 @@ const CabinForm = ({ cabinToEdit = {} }) => {
   });
 
   const submitHandler = (data) => {
-    mutation.mutate(data);
+    const payload = isEditState ? { ...data, id: cabinToEdit.id } : data;
+
+    mutation.mutate(payload);
   };
 
   const error = formState.errors;
@@ -99,9 +100,9 @@ const CabinForm = ({ cabinToEdit = {} }) => {
           type="file"
           accept="image/*"
           id="image"
-        // if editing mode image is optional
+          // if editing mode image is optional
           {...register('image', {
-            required: isEditState? false: 'Image is required',
+            required: isEditState ? false : 'Image is required',
           })}
         />
         {error?.image && <p>{error.image.message}</p>}
@@ -109,7 +110,7 @@ const CabinForm = ({ cabinToEdit = {} }) => {
       <div>
         <button type="reset">Cancel</button>
         <button type="submit" disabled={mutation.isPending}>
-         {isEditState ? 'Edit Cabin' : 'Create New Cabin' }
+          {isEditState ? 'Edit Cabin' : 'Create New Cabin'}
         </button>
       </div>
     </form>
