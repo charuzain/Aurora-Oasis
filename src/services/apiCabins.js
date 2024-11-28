@@ -50,17 +50,36 @@ export const AddNewCabin = async (newCabin) => {
 };
 
 export const editCabin = async (newCabin) => {
+  const supabaseUrl =
+  'https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images';
+  const { id, ...newCabinData } = newCabin;
+  let imagePath;
 
-  const { id, ...newValue } = newCabin;
+  if (
+    typeof newCabin.image === 'string' &&
+    newCabin.image.startsWith(supabaseUrl)
+  ) {
+    imagePath = newCabin.image;
+  } else if (typeof newCabin.image === 'object' && newCabin.image[0]?.name) {
+    const imageName = `${Math.random()}-${newCabin.image[0].name}`;
+    imagePath = `${supabaseUrl}/${imageName}`;
+
+
+    const { error: storageError } = await supabase.storage
+      .from('cabin-images')
+      .upload(imageName, newCabin.image[0]);
+    if (storageError) {
+      throw new Error('Image cant be uplaoded');
+    }
+  }
+
   const { data, error } = await supabase
     .from('cabins')
-    .update({...newValue })
+    .update({ ...newCabinData, image: imagePath })
     .eq('id', id)
     .select();
-
   if (error) {
-    console.error(error);
-    throw new Error('Cabin could not be updated');
+     throw new Error('Cabin cant be updated');
   }
   return data;
 };

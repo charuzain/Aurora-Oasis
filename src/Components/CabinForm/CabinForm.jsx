@@ -16,7 +16,7 @@ const CabinForm = ({ cabinToEdit = {} }) => {
   const mutation = useMutation({
     mutationFn: isEditState ? editCabin : AddNewCabin,
     onSuccess: () => {
-      toast.success('New cabin added succesfully !');
+      toast.success(isEditState ? 'Cabin updated succesfully' : 'New cabin added succesfully !');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
       reset();
     },
