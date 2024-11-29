@@ -3,7 +3,7 @@ import { useState } from 'react';
 import CabinForm from '../CabinForm/CabinForm';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AddNewCabin, deleteCabin } from '../../services/apiCabins';
+import {deleteCabin, duplicateCabinApi } from '../../services/apiCabins';
 
 const Cabin = ({ cabin }) => {
   const [showForm, setShowForm] = useState(false);
@@ -16,7 +16,6 @@ const Cabin = ({ cabin }) => {
     mutationFn: (id) => deleteCabin(id),
     onSuccess: () => {
       toast.success('Cabin deleted successfully');
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
     },
     onError: (error) => {
@@ -26,10 +25,9 @@ const Cabin = ({ cabin }) => {
   });
 
   const duplicateCabin = useMutation({
-    mutationFn: AddNewCabin,
+    mutationFn: duplicateCabinApi,
     onSuccess: () => {
       toast.success('Cabin duplicated successfully');
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
     },
     onError: (error) => {
@@ -46,9 +44,19 @@ const Cabin = ({ cabin }) => {
         <p>{cabin.regularPrice}</p>
         <p>{cabin.discount}</p>
         <div>
-          <button onClick={() => {
-            duplicateCabin.mutate(cabin)
-          }}>Duplicate</button>
+          <button
+            onClick={() => {
+              duplicateCabin.mutate({
+                name: `Duplicate ${cabin.name}`,
+                image: cabin.image,
+                maxCapacity: cabin.maxCapacity,
+                regularPrice: cabin.regularPrice,
+                discount: cabin.discount,
+              });
+            }}
+          >
+            Duplicate
+          </button>
           <button onClick={editClickHandler}>Edit</button>
           <button
             onClick={() => {

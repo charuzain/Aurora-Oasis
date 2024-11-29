@@ -21,7 +21,6 @@ export const deleteCabin = async (id) => {
 };
 
 export const AddNewCabin = async (newCabin) => {
-  console.log('add form');
   const imageName = `${Math.random()}-${newCabin.image[0].name}`;
   const imagePath = `https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images/${imageName}`;
 
@@ -49,9 +48,23 @@ export const AddNewCabin = async (newCabin) => {
   return data;
 };
 
+export const duplicateCabinApi = async (cabin) => {
+  const { data, error } = await supabase
+    .from('cabins')
+    .insert([cabin])
+    .select();
+  if (error) {
+    console.error(error);
+    throw new Error('Cabin could not be created');
+  }
+  console.log('hi');
+  console.log(data);
+  return data;
+};
+
 export const editCabin = async (newCabin) => {
   const supabaseUrl =
-  'https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images';
+    'https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/cabin-images';
   const { id, ...newCabinData } = newCabin;
   let imagePath;
 
@@ -63,7 +76,6 @@ export const editCabin = async (newCabin) => {
   } else if (typeof newCabin.image === 'object' && newCabin.image[0]?.name) {
     const imageName = `${Math.random()}-${newCabin.image[0].name}`;
     imagePath = `${supabaseUrl}/${imageName}`;
-
 
     const { error: storageError } = await supabase.storage
       .from('cabin-images')
@@ -79,7 +91,7 @@ export const editCabin = async (newCabin) => {
     .eq('id', id)
     .select();
   if (error) {
-     throw new Error('Cabin cant be updated');
+    throw new Error('Cabin cant be updated');
   }
   return data;
 };
