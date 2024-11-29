@@ -108,6 +108,7 @@ const CabinForm = ({ cabinToEdit = {} }) => {
         {error?.image && <p>{error.image.message}</p>}
       </div>
       <div>
+
         <button type="reset">Cancel</button>
         <button type="submit" disabled={mutation.isPending}>
           {isEditState ? 'Edit Cabin' : 'Create New Cabin'}
