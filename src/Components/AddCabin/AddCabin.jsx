@@ -1,15 +1,13 @@
-import { useState } from "react";
-import CabinForm from "../CabinForm/CabinForm";
+import Modal from '../Modal/Modal';
+import { useModal } from '../../hooks/useModal';
 
 const AddCabin = () => {
-  const [showForm , setShowForm] = useState(false)
-  const addCabinHandler = () => {
-    setShowForm(!showForm)
-  }; 
+  const { showModal, showModalHandler } = useModal();
+
   return (
     <div>
-      <button onClick={addCabinHandler}>AddCabin</button>
-      {showForm && <CabinForm/>}
+      <button onClick={showModalHandler}>AddCabin</button>
+      {showModal && <Modal showModalHandler={showModalHandler} />}
     </div>
   );
 };

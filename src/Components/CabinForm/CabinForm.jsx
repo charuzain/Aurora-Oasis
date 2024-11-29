@@ -5,7 +5,7 @@ import { AddNewCabin, editCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
-const CabinForm = ({ cabinToEdit = {} }) => {
+const CabinForm = ({ cabinToEdit = {}, showModalHandler }) => {
   const isEditState = Boolean(cabinToEdit.id);
 
   const { register, handleSubmit, formState, reset, getValues } = useForm({
@@ -16,8 +16,13 @@ const CabinForm = ({ cabinToEdit = {} }) => {
   const mutation = useMutation({
     mutationFn: isEditState ? editCabin : AddNewCabin,
     onSuccess: () => {
-      toast.success(isEditState ? 'Cabin updated succesfully' : 'New cabin added succesfully !');
+      toast.success(
+        isEditState
+          ? 'Cabin updated succesfully'
+          : 'New cabin added succesfully !'
+      );
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      showModalHandler();
       reset();
     },
     onError: (err) => {
@@ -108,8 +113,7 @@ const CabinForm = ({ cabinToEdit = {} }) => {
         {error?.image && <p>{error.image.message}</p>}
       </div>
       <div>
-
-        <button type="reset">Cancel</button>
+        <button type="reset" onClick={showModalHandler}>Cancel</button>
         <button type="submit" disabled={mutation.isPending}>
           {isEditState ? 'Edit Cabin' : 'Create New Cabin'}
         </button>

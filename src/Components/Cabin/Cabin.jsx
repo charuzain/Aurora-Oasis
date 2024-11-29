@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import CabinForm from '../CabinForm/CabinForm';
-import toast from 'react-hot-toast';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {deleteCabin, duplicateCabinApi } from '../../services/apiCabins';
+import toast from 'react-hot-toast';
+import { useModal } from '../../hooks/useModal';
+import { deleteCabin, duplicateCabinApi } from '../../services/apiCabins';
+import Modal from '../Modal/Modal';
 
 const Cabin = ({ cabin }) => {
-  const [showForm, setShowForm] = useState(false);
-  const editClickHandler = () => {
-    setShowForm(!showForm);
-  };
+  const { showModal, showModalHandler } = useModal();
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -35,6 +34,7 @@ const Cabin = ({ cabin }) => {
       console.error('Error duplicating cabin:', error);
     },
   });
+
   return (
     <>
       <div className="row">
@@ -57,7 +57,7 @@ const Cabin = ({ cabin }) => {
           >
             Duplicate
           </button>
-          <button onClick={editClickHandler}>Edit</button>
+          <button onClick={showModalHandler}>Edit</button>
           <button
             onClick={() => {
               mutation.mutate(cabin.id);
@@ -67,7 +67,9 @@ const Cabin = ({ cabin }) => {
           </button>
         </div>
       </div>
-      {showForm && <CabinForm cabinToEdit={cabin} />}
+      {showModal && (
+        <Modal showModalHandler={showModalHandler} cabinToEdit={cabin} />
+      )}
     </>
   );
 };
