@@ -3,25 +3,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useModal } from '../../hooks/useModal';
-import { deleteCabin, duplicateCabinApi } from '../../services/apiCabins';
+import { duplicateCabinApi } from '../../services/apiCabins';
 import Modal from '../Modal/Modal';
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete';
+import { useConfirmDelete } from '../../hooks/UseConfirmDelete';
 
 const Cabin = ({ cabin }) => {
   const { showModal, showModalHandler } = useModal();
+  const { showDeleteDialog, confirmDeleteHandler } = useConfirmDelete();
 
   const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: (id) => deleteCabin(id),
-    onSuccess: () => {
-      toast.success('Cabin deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-    },
-    onError: (error) => {
-      toast.error(error.message);
-      console.error('Error deleting cabin:', error);
-    },
-  });
 
   const duplicateCabin = useMutation({
     mutationFn: duplicateCabinApi,
@@ -58,15 +49,15 @@ const Cabin = ({ cabin }) => {
             Duplicate
           </button>
           <button onClick={showModalHandler}>Edit</button>
-          <button
-            onClick={() => {
-              mutation.mutate(cabin.id);
-            }}
-          >
-            Delete
-          </button>
+          <button onClick={confirmDeleteHandler}>Delete</button>
         </div>
       </div>
+      {showDeleteDialog && (
+        <ConfirmDelete
+          id={cabin.id}
+          confirmDeleteHandler={confirmDeleteHandler}
+        />
+      )}
       {showModal && (
         <Modal showModalHandler={showModalHandler} cabinToEdit={cabin} />
       )}
