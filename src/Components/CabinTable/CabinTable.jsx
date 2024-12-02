@@ -1,11 +1,12 @@
 import './CabinTable.scss';
-import {useQuery} from '@tanstack/react-query';
-import { getCabins} from '../../services/apiCabins';
+import { useQuery } from '@tanstack/react-query';
+import { getCabins } from '../../services/apiCabins';
 import Cabin from '../Cabin/Cabin';
-
+import { useSearchParams } from 'react-router-dom';
 
 const CabinTable = () => {
- 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const fetchCabins = async () => {
     try {
       const result = await getCabins();
@@ -23,15 +24,26 @@ const CabinTable = () => {
   } = useQuery({
     queryKey: ['cabins'],
     queryFn: fetchCabins,
-    
   });
-
 
   if (isPending) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
- 
- 
+
+  const filter = searchParams.get('discount');
+
+  let filteredValue;
+  if (filter === 'all') {
+    filteredValue = cabins;
+  }
+  if (filter === 'with-discount') {
+    filteredValue = cabins.filter((cabin) => cabin.discount > 0);
+  }
+
+   if (filter === 'no-discount') {
+     filteredValue = cabins.filter((cabin) => cabin.discount === 0);
+   }
+
   return (
     <>
       <div className="header">
@@ -42,7 +54,9 @@ const CabinTable = () => {
         <div>Discount</div>
         <div></div>
       </div>
-      {cabins.map((cabin) => <Cabin key={cabin.id} cabin={cabin} />)}
+      {filteredValue.map((cabin) => (
+        <Cabin key={cabin.id} cabin={cabin} />
+      ))}
     </>
   );
 };
