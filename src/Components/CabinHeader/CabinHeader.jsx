@@ -9,6 +9,7 @@ const CabinHeader = () => {
     setSearchParams(searchParams);
   };
 
+
   const filterButtons = [
     {
       label: 'All',
@@ -24,6 +25,8 @@ const CabinHeader = () => {
     },
   ];
 
+    const filterValue = searchParams.get('discount') || filterButtons[0].queryValue;
+
   return (
     <div>
       <h1>Cabins</h1>
@@ -31,6 +34,9 @@ const CabinHeader = () => {
         {filterButtons.map((val) => (
           <button
             key={val.queryValue}
+            style={{
+              backgroundColor: filterValue === val.queryValue ? 'red' : 'gray',
+            }}
             onClick={() => {
               updateFilterParams(val.queryValue);
             }}
