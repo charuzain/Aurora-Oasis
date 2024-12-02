@@ -5,11 +5,12 @@ import Cabin from '../Cabin/Cabin';
 import { useSearchParams } from 'react-router-dom';
 
 const CabinTable = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const fetchCabins = async () => {
     try {
       const result = await getCabins();
+      console.log(result)
       return result;
     } catch (error) {
       console.log(error);
@@ -30,9 +31,9 @@ const CabinTable = () => {
 
   if (error) return 'An error has occurred: ' + error.message;
 
-  const filter = searchParams.get('discount');
+  const filter = searchParams.get('discount') || 'all';
 
-  let filteredValue;
+  let filteredValue ;
   if (filter === 'all') {
     filteredValue = cabins;
   }

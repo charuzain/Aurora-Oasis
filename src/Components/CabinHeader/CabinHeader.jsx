@@ -2,32 +2,64 @@ import './CabinHeader.scss';
 import { useSearchParams } from 'react-router-dom';
 const CabinHeader = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams.get('discount'));
+
+  const updateFilterParams = (value) => {
+    // setSearchParams({ discount: value });
+    searchParams.set('discount', value);
+    setSearchParams(searchParams);
+  };
+
+  const filterButtons = [
+    {
+      label: 'All',
+      queryValue: 'all',
+    },
+    {
+      label: 'No Discount',
+      queryValue: 'no-discount',
+    },
+    {
+      label: 'With Discount',
+      queryValue: 'with-discount',
+    },
+  ];
+
   return (
     <div>
       <h1>Cabins</h1>
       <div>
-        <button
+        {filterButtons.map((val) => (
+          <button
+            key={val.queryValue}
+            onClick={() => {
+              updateFilterParams(val.queryValue);
+            }}
+          >
+            {val.label}
+          </button>
+        ))}
+
+        {/* <button
           onClick={() => {
-            setSearchParams({ discount: 'all' });
+            filterHandler('all');
           }}
         >
           All
         </button>
         <button
           onClick={() => {
-            setSearchParams({ discount: 'no-discount' });
+            filterHandler('no-discount');
           }}
         >
           No Discount
         </button>
         <button
           onClick={() => {
-            setSearchParams({ discount: 'with-discount' });
+            filterHandler('with-discount');
           }}
         >
           With Discount
-        </button>
+        </button> */}
       </div>
     </div>
   );
