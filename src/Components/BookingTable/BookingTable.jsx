@@ -6,6 +6,9 @@ const BookingTable = () => {
   const [searchParams] = useSearchParams();
 
   const filter = searchParams.get('status') || 'all';
+  const sortQuery = searchParams.get('sortBy') || 'startDate-asc';
+
+
 
   console.log(filter);
   const {
@@ -13,14 +16,14 @@ const BookingTable = () => {
     data: bookings,
     error,
   } = useQuery({
-    queryKey: ['bookings', filter],
-    queryFn: () => fetchAllBookings(filter),
+    queryKey: ['bookings', filter, sortQuery],
+    queryFn: () => fetchAllBookings(filter, sortQuery),
   });
 
   if (isPending) {
     return <h1>Loading..</h1>;
   }
-  console.log(bookings);
+  // console.log(bookings);
 
   return (
     <div>
