@@ -9,7 +9,6 @@ const CabinHeader = () => {
     setSearchParams(searchParams);
   };
 
-
   const filterButtons = [
     {
       label: 'All',
@@ -25,7 +24,15 @@ const CabinHeader = () => {
     },
   ];
 
-    const filterValue = searchParams.get('discount') || filterButtons[0].queryValue;
+  const filterValue =
+    searchParams.get('discount') || filterButtons[0].queryValue;
+
+  const sortHandler = (e) => {
+    searchParams.set('sortBy', e.target.value);
+    setSearchParams(searchParams);
+  };
+
+  const sortValue = searchParams.get('sortBy') || 'name-asc';
 
   return (
     <div>
@@ -44,29 +51,15 @@ const CabinHeader = () => {
             {val.label}
           </button>
         ))}
-
-        {/* <button
-          onClick={() => {
-            filterHandler('all');
-          }}
-        >
-          All
-        </button>
-        <button
-          onClick={() => {
-            filterHandler('no-discount');
-          }}
-        >
-          No Discount
-        </button>
-        <button
-          onClick={() => {
-            filterHandler('with-discount');
-          }}
-        >
-          With Discount
-        </button> */}
       </div>
+      <select onChange={sortHandler} value={sortValue}>
+        <option value="name-asc">Sort by name (A-Z)</option>
+        <option value="name-desc">Sort by name (Z-A)</option>
+        <option value="regularPrice-desc">Sort by price (High to Low)</option>
+        <option value="regularPrice-asc">Sort by price (Low to High)</option>
+        <option value="maxCapacity-desc">Sort by capacity (High to Low)</option>
+        <option value="maxCapacity-asc">Sort by capacity (Low first)</option>
+      </select>
     </div>
   );
 };

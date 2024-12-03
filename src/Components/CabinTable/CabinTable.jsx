@@ -10,7 +10,6 @@ const CabinTable = () => {
   const fetchCabins = async () => {
     try {
       const result = await getCabins();
-      console.log(result)
       return result;
     } catch (error) {
       console.log(error);
@@ -31,9 +30,9 @@ const CabinTable = () => {
 
   if (error) return 'An error has occurred: ' + error.message;
 
-  const filter = searchParams.get('discount') || 'all';
+  const filter = searchParams.get('discount');
 
-  let filteredValue ;
+  let filteredValue = cabins;
   if (filter === 'all') {
     filteredValue = cabins;
   }
@@ -41,10 +40,25 @@ const CabinTable = () => {
     filteredValue = cabins.filter((cabin) => cabin.discount > 0);
   }
 
-   if (filter === 'no-discount') {
-     filteredValue = cabins.filter((cabin) => cabin.discount === 0);
-   }
+  if (filter === 'no-discount') {
+    filteredValue = cabins.filter((cabin) => cabin.discount === 0);
+  }
 
+  const sortQuery = searchParams.get('sortBy') || 'name-asc';
+  const [field, order] = sortQuery.split('-');
+  const sortedCabin = filteredValue.sort((a, b) => {
+    if (typeof a[field] === 'string') {
+      return order === 'asc'
+        ? a[field].localeCompare(b[field])
+        : b[field].localeCompare(a[field]);
+    } else {
+      if (order === 'desc') {
+        return b[field] - a[field];
+      } else {
+        return a[field] - b[field];
+      }
+    }
+  });
   return (
     <>
       <div className="header">
@@ -55,7 +69,7 @@ const CabinTable = () => {
         <div>Discount</div>
         <div></div>
       </div>
-      {filteredValue.map((cabin) => (
+      {sortedCabin.map((cabin) => (
         <Cabin key={cabin.id} cabin={cabin} />
       ))}
     </>
