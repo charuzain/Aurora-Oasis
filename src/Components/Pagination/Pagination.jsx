@@ -1,17 +1,14 @@
 import { HiChevronRight, HiChevronLeft } from 'react-icons/hi';
 import { useSearchParams } from 'react-router-dom';
-const NUM_PER_PAGE = 4;
+import { NUM_PER_PAGE } from '../../utils/constants';
+
 const Pagination = ({ count }) => {
   const [searchParam, setSearchParam] = useSearchParams();
   const pageNum = searchParam.get('page') || 1;
 
   const totalPages = Math.ceil(count / NUM_PER_PAGE);
-  console.log(totalPages);
-  console.log(pageNum);
 
   const paginationPrevHandler = () => {
-    console.log(Number(pageNum - 1));
-    console.log(typeof pageNum);
     searchParam.set('page', Number(pageNum) - 1 || pageNum);
     setSearchParam(searchParam);
   };
@@ -27,7 +24,11 @@ const Pagination = ({ count }) => {
     <footer>
       <div>
         Showing <span>{(pageNum - 1) * NUM_PER_PAGE + 1}</span> to
-        <span> {pageNum * NUM_PER_PAGE}</span> of<span>{count}</span> results
+        <span>
+          {' '}
+          {pageNum * NUM_PER_PAGE >= count ? count : pageNum * NUM_PER_PAGE}
+        </span>{' '}
+        of<span>{count}</span> results
       </div>
       <div>
         <button onClick={paginationPrevHandler}>

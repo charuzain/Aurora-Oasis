@@ -1,5 +1,6 @@
 import supabase from './dbConnection';
-const NUM_PER_PAGE = 4;
+// const NUM_PER_PAGE = 2;
+import { NUM_PER_PAGE } from '../utils/constants';
 
 export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   console.log('inside', filter, sortQuery);
