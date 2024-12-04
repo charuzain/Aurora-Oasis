@@ -8,6 +8,7 @@ import Settings from './Pages/settings/Settings';
 import AppLayout from './Pages/AppLayout/AppLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +69,7 @@ const queryClient = new QueryClient();
         }}
       />
       <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
