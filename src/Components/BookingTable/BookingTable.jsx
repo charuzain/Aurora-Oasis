@@ -8,20 +8,24 @@ const BookingTable = () => {
 
   const filter = searchParams.get('status') || 'all';
   const sortQuery = searchParams.get('sortBy') || 'startDate-asc';
+  const pageNum = searchParams.get('page') || 1;
+  console.log(pageNum)
 
   console.log(filter);
   const {
     isPending,
-    data: bookings,
+    data,
     error,
   } = useQuery({
-    queryKey: ['bookings', filter, sortQuery],
-    queryFn: () => fetchAllBookings(filter, sortQuery),
+    queryKey: ['bookings', filter, sortQuery , pageNum],
+    queryFn: () => fetchAllBookings(filter, sortQuery, pageNum),
   });
 
   if (isPending) {
     return <h1>Loading..</h1>;
   }
+  let bookings = data.bookings
+  let count = data. count 
 
   return (
     <>
@@ -43,7 +47,7 @@ const BookingTable = () => {
           </div>
         ))}
       </div>
-      <Pagination count={bookings.length} />
+      <Pagination count={count} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { HiChevronRight, HiChevronLeft } from 'react-icons/hi';
 import { useSearchParams } from 'react-router-dom';
-const NUM_PER_PAGE = 3;
+const NUM_PER_PAGE = 4;
 const Pagination = ({ count }) => {
   const [searchParam, setSearchParam] = useSearchParams();
   const pageNum = searchParam.get('page') || 1;
