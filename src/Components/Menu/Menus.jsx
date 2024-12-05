@@ -6,11 +6,13 @@ const MenusContext = createContext();
 const Menus = ({ children }) => {
   // which one is currently opened id
   const [openId, setOpenID] = useState(''); // none of menus is open
-
+  const [position, setPosition] = useState(null);
   const close = () => setOpenID('');
   const open = setOpenID;
   return (
-    <MenusContext.Provider value={{ openId, open, close }}>
+    <MenusContext.Provider
+      value={{ openId, open, close, position, setPosition }}
+    >
       {children}
     </MenusContext.Provider>
   );
@@ -19,8 +21,15 @@ const Menu = ({ children }) => {
   return <div>{children}</div>;
 };
 const Toggle = ({ id }) => {
-  const { openId, open, close } = useContext(MenusContext);
-  const handleClick = () => {
+  const { openId, open, close, position, setPosition } =
+    useContext(MenusContext);
+  const handleClick = (e) => {
+    const rect = e.target.closest('button').getBoundingClientRect();
+    console.log(rect)
+    setPosition({
+      x: window.innerWidth - rect.width - rect.x,
+      y: rect.height + rect.y + 8,
+    });
     if (openId === '' || openId !== id) {
       open(id);
     } else {
@@ -34,10 +43,10 @@ const Toggle = ({ id }) => {
   );
 };
 const List = ({ id, children }) => {
-  const { openId } = useContext(MenusContext);
+  const { openId,position } = useContext(MenusContext);
   if (openId !== id) return null;
   return createPortal(
-    <ul style={{ position: 'fixed', top: 20, right: 20 }}>{children}</ul>,
+    <ul style={{ position: 'fixed', top: position.y, right: position.x }}>{children}</ul>,
     document.body
   );
 };
