@@ -6,6 +6,12 @@ import { NUM_PER_PAGE } from '../../utils/constants';
 import './BookingTable.scss';
 import Menus from '../Menu/Menus';
 import { HiEllipsisVertical } from 'react-icons/hi2';
+import {
+  HiArrowDownOnSquare,
+  HiArrowUpOnSquare,
+  HiEye,
+  HiTrash,
+} from 'react-icons/hi2';
 
 const BookingTable = () => {
   const [searchParams] = useSearchParams();
@@ -42,31 +48,36 @@ const BookingTable = () => {
 
   return (
     <div>
-      
-        {bookings.map((booking) => (
-          <div key={booking.id} className="row">
-            <div>{booking.cabins.name}</div>
-            <div>
-              <span>{booking.guests.fullName}</span>
-              <span>{booking.guests.email}</span>
-            </div>
-            <div>
-              <span>{booking.numNights} night stay</span>
-              <span>{booking.startDate} </span>
-              <span>{booking.endDate} </span>
-            </div>
-            <div>{booking.status}</div>
-            <div>${booking.totalPrice}</div>
-            <Menus.Menu>
-              <Menus.Toggle id={booking.id} />
-              <Menus.List id={booking.id}>
-                <Menus.Button>Add</Menus.Button>
-                <Menus.Button>Add</Menus.Button>
-              </Menus.List>
-            </Menus.Menu>
+      {bookings.map((booking) => (
+        <div key={booking.id} className="row">
+          <div>{booking.cabins.name}</div>
+          <div>
+            <span>{booking.guests.fullName}</span>
+            <span>{booking.guests.email}</span>
           </div>
-        ))}
-    
+          <div>
+            <span>{booking.numNights} night stay</span>
+            <span>{booking.startDate} </span>
+            <span>{booking.endDate} </span>
+          </div>
+          <div>{booking.status}</div>
+          <div>${booking.totalPrice}</div>
+          <Menus.Menu>
+            <Menus.Toggle id={booking.id} />
+            <Menus.List id={booking.id}>
+              <Menus.Button icon={<HiEye />} >See details</Menus.Button>
+
+              <Menus.Button icon={<HiTrash />}>Check in</Menus.Button>
+
+              <Menus.Button icon={<HiArrowDownOnSquare />}>
+                Delete booking
+              </Menus.Button>
+
+            </Menus.List>
+          </Menus.Menu>
+        </div>
+      ))}
+
       {Math.ceil(count / NUM_PER_PAGE) > 1 && <Pagination count={count} />}
     </div>
   );

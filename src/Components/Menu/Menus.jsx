@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 
@@ -25,7 +25,7 @@ const Toggle = ({ id }) => {
     useContext(MenusContext);
   const handleClick = (e) => {
     const rect = e.target.closest('button').getBoundingClientRect();
-    console.log(rect)
+    console.log(rect);
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.height + rect.y + 8,
@@ -43,17 +43,44 @@ const Toggle = ({ id }) => {
   );
 };
 const List = ({ id, children }) => {
-  const { openId,position } = useContext(MenusContext);
+  const { openId, position, close } = useContext(MenusContext);
+
+  const menuRef = useRef();
+
+  useEffect(() => {
+    const handleOutsideClick = function (e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        close();
+      }
+    };
+    document.addEventListener('click', handleOutsideClick,true);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick,true);
+    };
+  }, []);
+
   if (openId !== id) return null;
   return createPortal(
-    <ul style={{ position: 'fixed', top: position.y, right: position.x }}>{children}</ul>,
+    <ul
+      style={{ position: 'fixed', top: position.y, right: position.x }}
+      ref={menuRef}
+    >
+      {children}
+    </ul>,
     document.body
   );
 };
-const Button = ({ children }) => {
+const Button = ({ children, icon }) => {
+  const { close } = useContext(MenusContext);
+  const clickHander = () => {
+    close();
+  };
   return (
     <li>
-      <button>{children}</button>
+      <button onClick={clickHander}>
+        <span>{icon}</span>
+        {children}
+      </button>
     </li>
   );
 };
