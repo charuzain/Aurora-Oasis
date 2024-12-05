@@ -32,3 +32,18 @@ export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   }
   return { bookings, count };
 };
+
+export const fetchBookingById = async (id) => {
+  let { data: booking, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .eq('id', id).single();
+
+  if (error) {
+    throw new Error(`Booking with id ${id} cant be fetched`);
+  }
+  console.log('booking ia', booking);
+  console.log(error)
+
+  return booking;
+};
