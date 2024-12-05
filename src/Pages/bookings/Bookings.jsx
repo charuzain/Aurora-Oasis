@@ -12,6 +12,7 @@ const Bookings = () => {
     <>
       <Menus>
         <TableHeader />
+        <BookingHeader/>
         <BookingTable />
       </Menus>
     </>

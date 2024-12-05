@@ -72,16 +72,26 @@ const BookingTable = () => {
             <Menus.List id={booking.id}>
               <Menus.Button
                 icon={<HiEye />}
-                onClick={()=>detailHandler(booking.id)}
+                onClick={() => detailHandler(booking.id)}
               >
                 See details
               </Menus.Button>
 
-              <Menus.Button icon={<HiTrash />}>Check in</Menus.Button>
+              {booking.status === 'unconfirmed' && (
+                <Menus.Button
+                  icon={<HiArrowDownOnSquare />}
+                  onClick={() => navigate(`/checkin/${booking.id}`)}
+                >
+                  Check in
+                </Menus.Button>
+              )}
+              {booking.status === 'checked-in' && (
+                <Menus.Button icon={<HiArrowUpOnSquare />} onClick={() => {}}>
+                  Check Out
+                </Menus.Button>
+              )}
 
-              <Menus.Button icon={<HiArrowDownOnSquare />}>
-                Delete booking
-              </Menus.Button>
+              <Menus.Button icon={<HiTrash />}>Delete booking</Menus.Button>
             </Menus.List>
           </Menus.Menu>
         </div>

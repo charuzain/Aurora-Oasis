@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import BookingDetail from './Pages/BookingDetail/BookingDetail';
+import CheckIn from './Pages/CheckIn/CheckIn';
 
 function App() {
   const router = createBrowserRouter([
@@ -32,6 +33,10 @@ function App() {
         {
           path: '/bookings/:bookingId',
           element: <BookingDetail />,
+        },
+        {
+          path: 'checkin/:bookingId',
+          element: <CheckIn />,
         },
         {
           path: 'cabins',
