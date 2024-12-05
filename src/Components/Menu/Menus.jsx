@@ -70,9 +70,10 @@ const List = ({ id, children }) => {
     document.body
   );
 };
-const Button = ({ children, icon }) => {
+const Button = ({ children, icon, onClick }) => {
   const { close } = useContext(MenusContext);
   const clickHander = () => {
+    onClick?.();
     close();
   };
   return (

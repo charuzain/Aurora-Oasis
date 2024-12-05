@@ -1,6 +1,6 @@
 import { fetchAllBookings } from '../../services/apiBookings';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from '../Pagination/Pagination';
 import { NUM_PER_PAGE } from '../../utils/constants';
 import './BookingTable.scss';
@@ -15,6 +15,7 @@ import {
 
 const BookingTable = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const filter = searchParams.get('status') || 'all';
   const sortQuery = searchParams.get('sortBy') || 'startDate-asc';
@@ -46,6 +47,10 @@ const BookingTable = () => {
     });
   }
 
+  const detailHandler = (id) => {
+    navigate(`/bookings/${id}`);
+  };
+
   return (
     <div>
       {bookings.map((booking) => (
@@ -65,14 +70,18 @@ const BookingTable = () => {
           <Menus.Menu>
             <Menus.Toggle id={booking.id} />
             <Menus.List id={booking.id}>
-              <Menus.Button icon={<HiEye />} >See details</Menus.Button>
+              <Menus.Button
+                icon={<HiEye />}
+                onClick={()=>detailHandler(booking.id)}
+              >
+                See details
+              </Menus.Button>
 
               <Menus.Button icon={<HiTrash />}>Check in</Menus.Button>
 
               <Menus.Button icon={<HiArrowDownOnSquare />}>
                 Delete booking
               </Menus.Button>
-
             </Menus.List>
           </Menus.Menu>
         </div>
