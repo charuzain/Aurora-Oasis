@@ -16,8 +16,7 @@ const CheckIn = () => {
   if (isPending) {
     return <h1>Loading</h1>;
   }
-  // console.log(booking);
-
+  
   const totalPrice =
     booking.cabinPrice * booking.numNights + booking.extraPrice;
   
@@ -169,13 +168,21 @@ const CheckIn = () => {
       <section>
         <button
           onClick={() => {
-            mutation.mutate({
-              id: booking.id,
-              status: 'checked-in',
-              isPaid: true,
-              hasBreakfast: breakfastCheck,
-              totalPrice:totalPrice+60
-            });
+            if (breakfastCheck) {
+              mutation.mutate({
+                id: booking.id,
+                status: 'checked-in',
+                isPaid: true,
+                hasBreakfast: breakfastCheck,
+                totalPrice: totalPrice + 60,
+              })
+            } else {
+             mutation.mutate({
+               id: booking.id,
+               status: 'checked-in',
+               isPaid: true,
+             }); 
+            }
             navigate('/bookings')
           }}
           disabled={!confirmChecked}
