@@ -129,7 +129,7 @@ const BookingDetail = () => {
       
 
       <section>
-        <button>Check In</button>
+        <button onClick={()=>navigate(`/checkin/${booking.id}`)}>Check In</button>
         <button>Delete Booking</button>
         <button onClick={() => navigate(-1)}>Back</button>
       </section>
