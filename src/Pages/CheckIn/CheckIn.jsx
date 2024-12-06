@@ -20,6 +20,7 @@ const CheckIn = () => {
 
   const totalPrice =
     booking.cabinPrice * booking.numNights + booking.extraPrice;
+  
   const breakfastHandler = () => {
     setBreakfastCheck((prev) => !prev);
     if (confirm) {
@@ -170,7 +171,7 @@ const CheckIn = () => {
           onClick={() => {
             mutation.mutate({
               id: booking.id,
-              status: 'checked-out',
+              status: 'checked-in',
               isPaid: true,
               hasBreakfast: breakfastCheck,
               totalPrice:totalPrice+60

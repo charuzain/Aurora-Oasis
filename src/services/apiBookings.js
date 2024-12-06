@@ -28,6 +28,8 @@ export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   if (error) {
     throw new Error('Bookings cant be fetched');
   }
+  console.log("-==")
+  console.log("booking")
   return { bookings, count };
 };
 
