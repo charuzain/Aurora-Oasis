@@ -117,19 +117,19 @@ const BookingDetail = () => {
         </div>
       </section>
 
-     
-        <div>
-          Total Price ${totalPrice}{' '}
-          {booking.isPaid ? 'Paid' : 'Will Pay at property '}
-      </div>
-      
       <div>
-        Booked {booking.created_at}
+        Total Price ${totalPrice}{' '}
+        {booking.isPaid ? 'Paid' : 'Will Pay at property '}
       </div>
-      
+
+      <div>Booked {booking.created_at}</div>
 
       <section>
-        <button onClick={()=>navigate(`/checkin/${booking.id}`)}>Check In</button>
+        {booking.status === 'unconfirmed' && (
+          <button onClick={() => navigate(`/checkin/${booking.id}`)}>
+            Check In
+          </button>
+        )}
         <button>Delete Booking</button>
         <button onClick={() => navigate(-1)}>Back</button>
       </section>

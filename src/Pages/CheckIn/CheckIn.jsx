@@ -24,8 +24,9 @@ const CheckIn = () => {
       setConfirm(false);
     }
   };
-
-  const showBrekfastOption = booking.isPaid && booking.hasBreakfast;
+  const showBreakfastInput = !(booking.isPaid && booking.hasBreakfast);
+  // console.log(first)
+  const confirmChecked = !showBreakfastInput || confirm;
   return (
     <>
       <section
@@ -128,9 +129,10 @@ const CheckIn = () => {
       <div>Booked {booking.created_at}</div>
       {/* checkbox */}
       <section>
-        {/* If customer has already paid and had breakfast included , dont show the option to include breakfast and check confirm button by default */}
-        {!showBrekfastOption && (
+        {showBreakfastInput && (
           <div>
+            {/* hide breakgast checkbox if user has paid and have included breakfast , if not pai */}
+
             <input
               type="checkbox"
               id="breakfast"
@@ -141,22 +143,21 @@ const CheckIn = () => {
             <label htmlFor="breakfast">Want to add breakfast for $60.00?</label>
           </div>
         )}
-
         <div>
           <input
             type="checkbox"
             id="confirm"
             value={confirm}
             onChange={() => setConfirm((prev) => !prev)}
-            disabled={confirm}
-            checked={booking.isPaid || confirm}
+            // disabled={confirm}
+            checked={confirmChecked}
           />
           <label htmlFor="confirm">
             I confirm that {booking.guests.fullName} has paid the total amount
             of $
             {breakfastCheck
               ? `${totalPrice + 60} ($${totalPrice} + $ 60)`
-              : 1000}
+              : totalPrice}
           </label>
         </div>
       </section>
@@ -164,7 +165,7 @@ const CheckIn = () => {
       <section>
         <button
           onClick={() => navigate(`/checkin/${booking.id}`)}
-          disabled={!confirm}
+          disabled={!confirmChecked}
         >
           Check In booking #{booking.id}
         </button>
