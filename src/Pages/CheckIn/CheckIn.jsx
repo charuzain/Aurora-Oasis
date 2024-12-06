@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBookingDetails } from '../../hooks/useBookingDetails';
 import { HiMiniArrowLongLeft, HiMiniHomeModern } from 'react-icons/hi2';
+import { useCheckIn } from '../../hooks/useCheckIn';
 
 const CheckIn = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
   const [breakfastCheck, setBreakfastCheck] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const mutation = useCheckIn();
 
   const { data: booking, isPending, isError } = useBookingDetails(bookingId);
 
@@ -27,6 +29,7 @@ const CheckIn = () => {
   const showBreakfastInput = !(booking.isPaid && booking.hasBreakfast);
   // console.log(first)
   const confirmChecked = !showBreakfastInput || confirm;
+
   return (
     <>
       <section
@@ -164,7 +167,16 @@ const CheckIn = () => {
       {/* Buttons */}
       <section>
         <button
-          onClick={() => navigate(`/checkin/${booking.id}`)}
+          onClick={() => {
+            mutation.mutate({
+              id: booking.id,
+              status: 'checked-out',
+              isPaid: true,
+              hasBreakfast: breakfastCheck,
+              totalPrice:totalPrice+60
+            });
+            navigate('/bookings')
+          }}
           disabled={!confirmChecked}
         >
           Check In booking #{booking.id}

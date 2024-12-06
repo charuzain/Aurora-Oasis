@@ -11,7 +11,7 @@ const BookingDetail = () => {
   if (isPending) {
     return <h1>Loading</h1>;
   }
-  console.log(booking);
+  // console.log(booking);
   const totalPrice =
     booking.cabinPrice * booking.numNights + booking.extraPrice;
 

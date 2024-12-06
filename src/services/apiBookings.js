@@ -1,10 +1,8 @@
 import supabase from './dbConnection';
-// const NUM_PER_PAGE = 2;
 import { NUM_PER_PAGE } from '../utils/constants';
 
 export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   const [sortField, order] = sortQuery.split('-');
-  // console.log(sortField, order);
   let query = supabase
     .from('bookings')
     .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
@@ -47,4 +45,23 @@ export const fetchBookingById = async (id) => {
   console.log(error);
 
   return booking;
+};
+
+export const updateCheckIn = async (newValue) => {
+  const { id, ...updatedValue } = newValue;
+  console.log('---------');
+  console.log(id, updatedValue);
+  const { data, error } = await supabase
+    .from('bookings')
+    .update({ ...updatedValue })
+    .eq('id', id)
+    .select();
+
+  console.log(data);
+
+  if (error) {
+    console.log(error);
+    throw new Error('Problem checkin');
+  }
+  return data;
 };

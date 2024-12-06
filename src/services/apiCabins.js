@@ -58,8 +58,6 @@ export const duplicateCabinApi = async (cabin) => {
     console.error(error);
     throw new Error('Cabin could not be created');
   }
-  console.log('hi');
-  console.log(data);
   return data;
 };
 

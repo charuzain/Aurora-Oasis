@@ -5,17 +5,21 @@ import Pagination from '../Pagination/Pagination';
 import { NUM_PER_PAGE } from '../../utils/constants';
 import './BookingTable.scss';
 import Menus from '../Menu/Menus';
-import { HiEllipsisVertical } from 'react-icons/hi2';
+// import { HiEllipsisVertical } from 'react-icons/hi2';
 import {
   HiArrowDownOnSquare,
   HiArrowUpOnSquare,
   HiEye,
   HiTrash,
 } from 'react-icons/hi2';
+import { useCheckIn } from '../../hooks/useCheckIn';
+
 
 const BookingTable = () => {
+    const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const mutation = useCheckIn()
 
   const filter = searchParams.get('status') || 'all';
   const sortQuery = searchParams.get('sortBy') || 'startDate-asc';
@@ -25,7 +29,6 @@ const BookingTable = () => {
     queryKey: ['bookings', filter, sortQuery, pageNum],
     queryFn: () => fetchAllBookings(filter, sortQuery, pageNum),
   });
-  const queryClient = useQueryClient();
 
   if (isPending) {
     return <h1>Loading..</h1>;
@@ -85,8 +88,15 @@ const BookingTable = () => {
                   Check in
                 </Menus.Button>
               )}
+
+              {/* checkout change the sttaus from checkin to checkout */}
               {booking.status === 'checked-in' && (
-                <Menus.Button icon={<HiArrowUpOnSquare />} onClick={() => {}}>
+                <Menus.Button icon={<HiArrowUpOnSquare />} onClick={() => {
+                  mutation.mutate({
+                    id: booking.id,
+                    status:'checked-out'
+                  })
+                }}>
                   Check Out
                 </Menus.Button>
               )}
