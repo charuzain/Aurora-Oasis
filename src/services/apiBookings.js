@@ -28,8 +28,8 @@ export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   if (error) {
     throw new Error('Bookings cant be fetched');
   }
-  console.log("-==")
-  console.log("booking")
+  console.log('-==');
+  console.log('booking');
   return { bookings, count };
 };
 
@@ -64,6 +64,17 @@ export const updateCheckIn = async (newValue) => {
   if (error) {
     console.log(error);
     throw new Error('Problem checkin');
+  }
+  return data;
+};
+
+export const deleteBooking = async (id) => {
+  console.log(id)
+  const { data, error } = await supabase.from('bookings').delete().eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error('Booking could not be deleted');
   }
   return data;
 };

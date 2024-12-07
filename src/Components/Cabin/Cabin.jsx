@@ -14,6 +14,7 @@ import { MdDelete } from 'react-icons/md';
 import { useState } from 'react';
 import './Cabin.scss';
 import { useEffect, useRef } from 'react';
+import { useDeleteCabinQuery } from '../../hooks/deleteCabinQuery';
 
 const Cabin = ({ cabin }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -22,7 +23,7 @@ const Cabin = ({ cabin }) => {
   const buttonRef = useRef(null);
   const { showModal, showModalHandler } = useModal();
   const { showDeleteDialog, confirmDeleteHandler } = useConfirmDelete();
-
+  const mutation = useDeleteCabinQuery();
   const handleClickOutside = (e) => {
     if (
       menuRef.current &&
@@ -54,6 +55,10 @@ const Cabin = ({ cabin }) => {
   };
 
   const queryClient = useQueryClient();
+
+  const deleteCabinHandler = (id) => {
+    mutation.mutate(id);
+  }
 
   const duplicateCabin = useMutation({
     mutationFn: duplicateCabinApi,
@@ -135,8 +140,10 @@ const Cabin = ({ cabin }) => {
       </div>
       {showDeleteDialog && (
         <ConfirmDelete
+          name="cabin"
           id={cabin.id}
           confirmDeleteHandler={confirmDeleteHandler}
+          onClickDelete = {()=>deleteCabinHandler(cabin.id)}
         />
       )}
       {showModal && (

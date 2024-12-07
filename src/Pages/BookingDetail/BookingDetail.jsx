@@ -1,19 +1,27 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBookingDetails } from '../../hooks/useBookingDetails';
 import { HiMiniArrowLongLeft, HiMiniHomeModern } from 'react-icons/hi2';
+import { useConfirmDelete } from '../../hooks/UseConfirmDelete';
+import ConfirmDelete from '../../Components/ConfirmDelete/ConfirmDelete';
+import { useDeleteBooking } from '../../hooks/useDeleteBooking';
 
 const BookingDetail = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
+  const { showDeleteDialog, confirmDeleteHandler } = useConfirmDelete();
 
   const { data: booking, isPending, isError } = useBookingDetails(bookingId);
-
+  const { deleteBookingQuery, isDeletingCabin } = useDeleteBooking();
   if (isPending) {
     return <h1>Loading</h1>;
   }
   // console.log(booking);
   const totalPrice =
     booking.cabinPrice * booking.numNights + booking.extraPrice;
+
+  const deleteBookingHandler = (id) => {
+    deleteBookingQuery(id,  {onSettled: () => navigate(-1) });
+  };
 
   return (
     <>
@@ -130,9 +138,23 @@ const BookingDetail = () => {
             Check In
           </button>
         )}
-        <button>Delete Booking</button>
+        <button
+          onClick={() => {
+            confirmDeleteHandler();
+          }}
+        >
+          Delete Booking
+        </button>
         <button onClick={() => navigate(-1)}>Back</button>
       </section>
+      {showDeleteDialog && (
+        <ConfirmDelete
+          name="booking"
+          id={booking.id}
+          confirmDeleteHandler={confirmDeleteHandler}
+          onClickDelete={() => deleteBookingHandler(booking.id)}
+        />
+      )}
     </>
   );
 };

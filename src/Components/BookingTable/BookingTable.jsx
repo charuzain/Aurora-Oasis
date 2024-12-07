@@ -13,13 +13,23 @@ import {
   HiTrash,
 } from 'react-icons/hi2';
 import { useCheckIn } from '../../hooks/useCheckIn';
-
+import { useConfirmDelete } from '../../hooks/UseConfirmDelete';
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete';
+import { useDeleteBooking } from '../../hooks/useDeleteBooking';
 
 const BookingTable = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
+  const { showDeleteDialog, confirmDeleteHandler } = useConfirmDelete();
   const navigate = useNavigate();
-  const mutation = useCheckIn()
+  const { deleteBookingQuery, isDeletingCabin } = useDeleteBooking();
+  const mutation = useCheckIn();
+
+  const deleteCabinHandler = (id) => {
+    console.log("delete cabin")
+    console.log(id)
+    deleteBookingQuery(id);
+  };
 
   const filter = searchParams.get('status') || 'all';
   const sortQuery = searchParams.get('sortBy') || 'startDate-asc';
@@ -91,19 +101,36 @@ const BookingTable = () => {
 
               {/* checkout change the sttaus from checkin to checkout */}
               {booking.status === 'checked-in' && (
-                <Menus.Button icon={<HiArrowUpOnSquare />} onClick={() => {
-                  mutation.mutate({
-                    id: booking.id,
-                    status:'checked-out'
-                  })
-                }}>
+                <Menus.Button
+                  icon={<HiArrowUpOnSquare />}
+                  onClick={() => {
+                    mutation.mutate({
+                      id: booking.id,
+                      status: 'checked-out',
+                    });
+                  }}
+                >
                   Check Out
                 </Menus.Button>
               )}
 
-              <Menus.Button icon={<HiTrash />}>Delete booking</Menus.Button>
+              <Menus.Button icon={<HiTrash />} onClick={()=>confirmDeleteHandler()}>
+                Delete booking
+              </Menus.Button>
             </Menus.List>
           </Menus.Menu>
+
+          {showDeleteDialog && (
+            <ConfirmDelete
+              name="cabin"
+              id={booking.id}
+              confirmDeleteHandler={confirmDeleteHandler}
+              onClickDelete={() => {
+                deleteCabinHandler(booking.id)
+                confirmDeleteHandler() 
+              }}
+            />
+          )}
         </div>
       ))}
 

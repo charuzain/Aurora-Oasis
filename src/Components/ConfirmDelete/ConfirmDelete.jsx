@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { useDeleteCabinQuery } from '../../hooks/deleteCabinQuery';
 
-const ConfirmDelete = ({ id, confirmDeleteHandler }) => {
-  const mutation = useDeleteCabinQuery();
+const ConfirmDelete = ({ id,name, confirmDeleteHandler, onClickDelete }) => {
+  // const mutation = useDeleteCabinQuery();
 
+  const navigate = useNavigate()
   const ModalClickHandler = (e) => {
     e.stopPropagation();
   };
@@ -12,13 +14,15 @@ const ConfirmDelete = ({ id, confirmDeleteHandler }) => {
         <div>
           <button onClick={confirmDeleteHandler}>Close</button>
         </div>
-        <h1>Are you sure you want to delete the cabin</h1>
+        <h1>Are you sure you want to delete the {name}</h1>
         <p>This action cant be undone</p>
         <div>
           <button onClick={confirmDeleteHandler}>Cancel</button>
           <button
             onClick={() => {
-              mutation.mutate(id);
+              onClickDelete(id);
+              // navigate('/')
+              
             }}
           >
             Delete
