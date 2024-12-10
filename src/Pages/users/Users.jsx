@@ -1,7 +1,25 @@
+import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Value } from 'sass';
+import { signUp } from '../../services/apiAuth';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
+  const navigate = useNavigate();
+  const { mutate, isPending } = useMutation({
+    mutationFn: signUp,
+    mutationKey: ['email', 'password'],
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success('User created succesfully');
+      navigate('/');
+    },
+    onError: () => {
+      toast.error('There was an error creating new user');
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -9,13 +27,22 @@ const Users = () => {
     getValues,
     formState: { errors },
   } = useForm();
-  const passwordInput = getValues('password');
+
   const onSubmit = (data) => {
-    
-    console.log(data);
+    const { email, password, name } = data;
+    mutate(
+      { email, password, name },
+      {
+        onSettled: () => reset(),
+      }
+    );
   };
 
   const onErrors = (errors) => console.error(errors);
+
+  if (isPending) {
+    return <h1>Creating user</h1>;
+  }
   return (
     <>
       <h1>Create a new user</h1>
@@ -75,7 +102,7 @@ const Users = () => {
         </div>
 
         <div>
-          <button type='reset'>Cancel</button>
+          <button type="reset">Cancel</button>
           <button>Create new user</button>
         </div>
       </form>
@@ -90,4 +117,3 @@ export default Users;
 
 // https://blog.logrocket.com/react-hook-form-complete-guide/
 // The handleSubmit method can handle two functions as arguments. The first function passed as an argument will be invoked along with the registered field values when the form validation is successful. The second function is called with errors when the validation fails:
-
