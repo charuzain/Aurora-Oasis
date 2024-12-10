@@ -48,9 +48,9 @@ const Login = () => {
             value={password}
           />
         </div>
-
         <div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={isLogingIn
+          }>Login</button>
         </div>
       </form>
     </>

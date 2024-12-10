@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 *.css.map
 .env
+imp.md

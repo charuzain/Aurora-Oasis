@@ -11,12 +11,17 @@ import { Toaster } from 'react-hot-toast';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import BookingDetail from './Pages/BookingDetail/BookingDetail';
 import CheckIn from './Pages/CheckIn/CheckIn';
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <AppLayout />,
+      element: (
+        <ProtectedRoute>
+          <AppLayout />
+        </ProtectedRoute>
+      ),
       children: [
         {
           index: true,
@@ -57,7 +62,7 @@ function App() {
       element: <Login />,
     },
   ]);
-const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster
