@@ -6,6 +6,9 @@ import {
 import { logoutUser } from '../../services/apiAuth';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import defaultImage from '../../../public/default-user.jpg';
+import { TbLogout } from 'react-icons/tb';
+import { HiOutlineUser, HiOutlineMoon, HiOutlineSun } from 'react-icons/hi2';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -23,11 +26,20 @@ const Header = () => {
     },
   });
   return (
-    <>
-      <button onClick={() => mutate()} disabled={isPending}>
-        Logout
+    <div>
+      <div>
+        <img src={defaultImage} alt="Avatar" />
+      </div>
+      <button onClick={() => navigate('/account')}>
+        <HiOutlineUser />
       </button>
-    </>
+      <button>
+        <HiOutlineMoon />
+      </button>
+      <button onClick={() => mutate()} disabled={isPending}>
+        <TbLogout />
+      </button>
+    </div>
   );
 };
 

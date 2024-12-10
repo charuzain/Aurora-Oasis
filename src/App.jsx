@@ -13,6 +13,7 @@ import BookingDetail from './Pages/BookingDetail/BookingDetail';
 import CheckIn from './Pages/CheckIn/CheckIn';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import SignUp from './Pages/Signup/SignUp';
+import UserAccount from './Pages/UserAccount/UserAccount';
 
 function App() {
   const router = createBrowserRouter([
@@ -55,6 +56,10 @@ function App() {
         {
           path: 'settings',
           element: <Settings />,
+        },
+        {
+          path: '/account',
+          element: <UserAccount />,
         },
       ],
     },
