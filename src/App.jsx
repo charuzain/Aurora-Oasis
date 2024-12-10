@@ -8,10 +8,11 @@ import Settings from './Pages/settings/Settings';
 import AppLayout from './Pages/AppLayout/AppLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import BookingDetail from './Pages/BookingDetail/BookingDetail';
 import CheckIn from './Pages/CheckIn/CheckIn';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import SignUp from './Pages/Signup/SignUp';
 
 function App() {
   const router = createBrowserRouter([
@@ -60,6 +61,10 @@ function App() {
     {
       path: '/login',
       element: <Login />,
+    },
+    {
+      path: '/signup',
+      element: <SignUp />,
     },
   ]);
   const queryClient = new QueryClient();
