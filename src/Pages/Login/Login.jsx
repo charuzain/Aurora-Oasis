@@ -12,10 +12,18 @@ const Login = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      toast.error('Missing')
+      toast.error('Missing');
       return;
     }
-    login({ email, password });
+    login(
+      { email, password },
+      {
+        onSettled: () => {
+          setEmail('');
+          setPassword('');
+        },
+      }
+    );
   };
 
   const emailChangeHandler = (e) => {
@@ -49,8 +57,9 @@ const Login = () => {
           />
         </div>
         <div>
-          <button type="submit" disabled={isLogingIn
-          }>Login</button>
+          <button type="submit" disabled={isLogingIn}>
+            Login
+          </button>
         </div>
       </form>
     </>
