@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllBookings, fetchBookingById } from '../services/apiBookings';
+import { fetchBookingById } from '../services/apiBookings';
 
 export const useBookingDetails = (id) => {
   console.log(id);
