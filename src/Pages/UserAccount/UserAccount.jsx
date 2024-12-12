@@ -4,12 +4,12 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import PasswordChangeForm from '../../Components/PasswordChangeForm/PasswordChangeForm';
 
 const UserAccount = () => {
   const { user, isLoading, isError } = useCurrentUser();
   const [fullName, setFullName] = useState('');
   const [avatar, setAvatar] = useState(null);
-  const [password, setPassword] = useState('');
 
 
 
@@ -38,10 +38,7 @@ const UserAccount = () => {
     mutate({ fullName, avatar });
   };
 
-  const PasswordSubmitHandler = (e) => {
-    e.preventDefault();
-  };
-
+ 
   const nameChangeHandler = (e) => {
     // console.log(e.target);
     setFullName(e.target.value);
@@ -52,10 +49,7 @@ const UserAccount = () => {
     setAvatar(e.target.files[0]);
   };
 
-  const passwordChangeHandler = (e) => {
-    setPassword(e.target.value);
-  };
-
+  
   return (
     <>
       <h1>Update your account</h1>
@@ -104,6 +98,7 @@ const UserAccount = () => {
         </form>
       </section>
       {/* form2 */}
+      <PasswordChangeForm/>
 
     </>
   );
