@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
   const navigate = useNavigate();
+  
   const { mutate, isPending } = useMutation({
     mutationFn: signUp,
     mutationKey: ['email', 'password'],
@@ -29,9 +30,9 @@ const Users = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, password, name } = data;
+    const { email, password, fullName } = data;
     mutate(
-      { email, password, name },
+      { email, password, fullName },
       {
         onSettled: () => reset(),
       }
@@ -48,13 +49,13 @@ const Users = () => {
       <h1>Create a new user</h1>
       <form onSubmit={handleSubmit(onSubmit, onErrors)}>
         <div>
-          <label htmlFor="name">Full Name</label>
+          <label htmlFor="fullName">Full Name</label>
           <input
             type="text"
-            id="name"
-            {...register('name', { required: 'Full name is required' })}
+            id="fullName"
+            {...register('fullName', { required: 'Full name is required' })}
           />
-          <p> {errors?.name && errors.name.message}</p>
+          <p> {errors?.fullName && errors.fullName.message}</p>
         </div>
 
         <div>

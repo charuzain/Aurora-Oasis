@@ -8,7 +8,7 @@ import Settings from './Pages/settings/Settings';
 import AppLayout from './Pages/AppLayout/AppLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import BookingDetail from './Pages/BookingDetail/BookingDetail';
 import CheckIn from './Pages/CheckIn/CheckIn';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
@@ -94,7 +94,7 @@ function App() {
         }}
       />
       <RouterProvider router={router} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

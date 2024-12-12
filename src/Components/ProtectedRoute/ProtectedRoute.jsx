@@ -2,20 +2,25 @@ import { useQuery } from '@tanstack/react-query';
 import { getCurrentUser } from '../../services/apiAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 // wrap applayout in protectedroute componenet it determine if there is a currently logged in user , it there is a authenticated user all the routes un applayout can be accesses.
 const ProtectedRoute = ({ children }) => {
   // getCurrentUser();
   const navigate = useNavigate();
 
   // Load the authenticated user
-  const {
-    data: user,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['users'],
-    queryFn: getCurrentUser,
-  });
+  // const {
+  //   data: user,
+  //   isLoading,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ['users'],
+  //   queryFn: getCurrentUser,
+  // });
+  // {
+  //   user, isLoading, isError;
+  // }
+  const { user, isLoading, isError } = useCurrentUser();
 
   // if there is no authenticated user redirect to login
   useEffect(() => {
