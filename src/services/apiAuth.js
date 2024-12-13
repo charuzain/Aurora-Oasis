@@ -61,19 +61,18 @@ export const signUp = async ({ email, password, fullName }) => {
 };
 
 export const updateUser = async ({ fullName, avatar, password }) => {
-
-  console.log(avatar)
-  console.log(avatar instanceof File); 
+  console.log(password)
   let updatedData;
   // if password or full name update the user
   if (password) {
+    console.log(password);
     updatedData = { password };
   }
   if (fullName) {
     // Supabase uses data for updating user metadata.
     updatedData = {
       data: {
-        fullName
+        fullName,
       },
     };
   }
@@ -84,6 +83,8 @@ export const updateUser = async ({ fullName, avatar, password }) => {
     throw new Error(error.message);
   }
 
+  console.log(data);
+
   // if no image return
   if (!avatar) {
     return data;
@@ -91,7 +92,6 @@ export const updateUser = async ({ fullName, avatar, password }) => {
   // if image , create file name , upload the image to storage
   let avatarName = `avatar-${data.user.id}-${Math.random()}`;
 
- 
   const { data: uploadData, error: upLoadError } = await supabase.storage
     .from('avatars')
     .upload(avatarName, avatar);
@@ -101,9 +101,7 @@ export const updateUser = async ({ fullName, avatar, password }) => {
     throw new Error(upLoadError.message);
   }
 
-
-   let filePath = `https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/avatars/${avatarName}`;
-
+  let filePath = `https://mdnrxgpsinkkromefdlm.supabase.co/storage/v1/object/public/avatars/${avatarName}`;
 
   const { data: updatedUser, error: updateError } =
     await supabase.auth.updateUser({

@@ -1,32 +1,13 @@
 import { useState } from 'react';
-import { updateUser } from '../../services/apiAuth';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { useForm } from 'react-hook-form';
+import { useUpdateUser } from '../../hooks/useUpdateUser';
 import PasswordChangeForm from '../../Components/PasswordChangeForm/PasswordChangeForm';
 
 const UserAccount = () => {
-  const { user, isLoading, isError } = useCurrentUser();
   const [fullName, setFullName] = useState('');
   const [avatar, setAvatar] = useState(null);
-
-
-
-
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: updateUser,
-    onSuccess: ({ user }) => {
-      // queryClient.setQueryData(['users'], user);
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('user updated');
-    },
-    onError: () => {
-      toast.error('cant update user');
-    },
-  });
+  const { user } = useCurrentUser();
+  const { editUserInfo, isPending } = useUpdateUser();
 
   const currentUser = user.email;
 
@@ -35,12 +16,12 @@ const UserAccount = () => {
     if (!fullName) {
       return;
     }
-    mutate({ fullName, avatar });
+    editUserInfo({ fullName, avatar });
+      setFullName('');
+      setAvatar(null);
   };
 
- 
   const nameChangeHandler = (e) => {
-    // console.log(e.target);
     setFullName(e.target.value);
   };
 
@@ -49,11 +30,9 @@ const UserAccount = () => {
     setAvatar(e.target.files[0]);
   };
 
-  
   return (
     <>
       <h1>Update your account</h1>
-      {/* form1 */}
       <section>
         <h2>Update user data</h2>
         <form onSubmit={formSubmitHandler}>
@@ -97,9 +76,7 @@ const UserAccount = () => {
           </div>
         </form>
       </section>
-      {/* form2 */}
-      <PasswordChangeForm/>
-
+      <PasswordChangeForm />
     </>
   );
 };

@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import CabinForm from '../CabinForm/CabinForm';
 import './Modal.scss';
 
