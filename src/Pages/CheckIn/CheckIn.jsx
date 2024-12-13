@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBookingDetails } from '../../hooks/useBookingDetails';
 import { HiMiniArrowLongLeft, HiMiniHomeModern } from 'react-icons/hi2';
@@ -16,6 +16,9 @@ const CheckIn = () => {
   if (isPending) {
     return <h1>Loading</h1>;
   }
+   if (isError) {
+     return <h1>Error</h1>;
+   }
   
   const totalPrice =
     booking.cabinPrice * booking.numNights + booking.extraPrice;

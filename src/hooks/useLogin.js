@@ -5,7 +5,6 @@ import { loginApi } from '../services/apiAuth';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  console.log("hi")
 
   const { mutate: login, isPending: isLogingIn } = useMutation({
     mutationFn: loginApi,
