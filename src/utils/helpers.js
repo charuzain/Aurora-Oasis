@@ -28,3 +28,17 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat('en', { style: 'currency', currency: 'USD' }).format(
     value
   );
+
+export const startDate = (days) => {
+  const todayDate = new Date();
+  todayDate.setDate(todayDate.getDate() - days);
+  return todayDate.toISOString();
+};
+
+export const todayDate = () => {
+  const currentDate = new Date();
+  // This ensures  all records created up until the last possible moment of the day are included. Without this, queries like lte('created_at', today) might exclude records with timestamps late in the day.
+  currentDate.setUTCHours(23, 59, 59, 999)
+  const isoEndOfDay = currentDate.toISOString()
+  return isoEndOfDay
+}
