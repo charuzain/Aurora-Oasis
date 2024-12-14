@@ -1,5 +1,6 @@
 import supabase from './dbConnection';
 import { NUM_PER_PAGE } from '../utils/constants';
+import { todayDate } from '../utils/helpers';
 
 export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   const [sortField, order] = sortQuery.split('-');
@@ -69,7 +70,7 @@ export const updateCheckIn = async (newValue) => {
 };
 
 export const deleteBooking = async (id) => {
-  console.log(id)
+  console.log(id);
   const { data, error } = await supabase.from('bookings').delete().eq('id', id);
 
   if (error) {
@@ -77,4 +78,37 @@ export const deleteBooking = async (id) => {
     throw new Error('Booking could not be deleted');
   }
   return data;
+};
+
+export const GetBookingsAfterDate = async (date) => {
+  console.log(date);
+  let { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .gte('created_at', date)
+    .lte('created_at', todayDate());
+  console.log(data);
+  if (error) {
+    console.log(error);
+    throw new Error(`Data cant be fetched`);
+  }
+  // console.log(bookings)
+  return { data, error };
+};
+
+export const GetStayAfterDate = async (date) => {
+  let { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .gte('startDate', date)
+    .lte('startDate', todayDate());
+
+  if (error) {
+    console.log(error);
+    throw new Error(`Bookings cant be fetched`);
+  }
+  console.log(data);
+  const confirmedStay = data.filter((stay) => stay.status !== 'unconfirmed');
+  console.log(confirmedStay);
+  return { confirmedStay, error };
 };
