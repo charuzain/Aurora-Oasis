@@ -2,10 +2,11 @@ import { useSearchParams } from 'react-router-dom';
 import { useBookingAfterDate } from '../../hooks/useBookingAfterDate';
 import { useStayAfterDate } from '../../hooks/useStayAfterDate';
 import DashBoardLayout from '../../Components/DashBoardLayout/DashBoardLayout';
+import { useCabin } from '../../hooks/useCabins';
 
 const Dashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isPending, isError, data, error } = useBookingAfterDate();
+  const { isPending, isError,data, error } = useBookingAfterDate();
 
   const {
     isStaysPending,
@@ -19,9 +20,11 @@ const Dashboard = () => {
     setSearchParams(searchParams);
   };
 
+  const { cabins, isPending:isCabinsLoading} = useCabin();
+
 
   console.log(isPending);
-  if (isPending || isStaysPending) {
+  if (isPending || isStaysPending || isCabinsLoading) {
     return <h1>Loading...</h1>;
   }
 
@@ -31,7 +34,9 @@ const Dashboard = () => {
 
  
   if (!isStaysPending && staysData) {
-    const { confirmedStay } = staysData;
+    console.log(staysData.confirmedStay)
+    console.log(data.data)
+    const confirmedStay  = staysData.confirmedStay;
     console.log('Confirmed Stays:', confirmedStay);
   }
 
@@ -43,7 +48,11 @@ const Dashboard = () => {
         <button onClick={() => updateFilterParams('30')}>Last 30 days</button>
         <button onClick={() => updateFilterParams('90')}>Last 90 days</button>
       </div>
-      <DashBoardLayout />
+      <DashBoardLayout
+        bookings={data.data}
+        stays={staysData.confirmedStay}
+        cabins={cabins}
+      />
     </>
   );
 };

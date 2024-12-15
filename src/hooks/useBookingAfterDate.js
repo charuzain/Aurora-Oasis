@@ -13,6 +13,7 @@ export const useBookingAfterDate = () => {
     queryKey: ['bookings', queryDays],
     queryFn: () => GetBookingsAfterDate(date),
   });
-
+  console.log(data)
+// const bookings = data.data
   return { isPending, isError, data, error };
 };

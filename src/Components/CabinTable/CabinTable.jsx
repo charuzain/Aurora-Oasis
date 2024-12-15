@@ -1,33 +1,13 @@
-import './CabinTable.scss';
-import { useQuery } from '@tanstack/react-query';
-import { getCabins } from '../../services/apiCabins';
-import Cabin from '../Cabin/Cabin';
 import { useSearchParams } from 'react-router-dom';
+import { useCabin } from '../../hooks/useCabins';
+import './CabinTable.scss';
+import Cabin from '../Cabin/Cabin';
 
 const CabinTable = () => {
   const [searchParams] = useSearchParams();
-
-  const fetchCabins = async () => {
-    try {
-      const result = await getCabins();
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-  // Queries
-  const {
-    isPending,
-    data: cabins,
-    error,
-  } = useQuery({
-    queryKey: ['cabins'],
-    queryFn: fetchCabins,
-  });
+  const { isPending, cabins , error} = useCabin()
 
   if (isPending) return 'Loading...';
-
   if (error) return 'An error has occurred: ' + error.message;
 
   const filter = searchParams.get('discount');
