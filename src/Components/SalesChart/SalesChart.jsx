@@ -21,7 +21,6 @@ const SalesChart = ({ bookings }) => {
     start: startDate,
     end: new Date(),
   });
-
   const data = dateInterval.map((elem) => ({
     label: format(elem, 'MMM dd'),
     totalSales: bookings
@@ -37,7 +36,10 @@ const SalesChart = ({ bookings }) => {
   // MMMM December
   return (
     <>
-      <h2>Sales</h2>
+      <h2>
+        Sales from {format(dateInterval[0], 'MMM dd yyyy')} &mdash;
+        {format(dateInterval[dateInterval.length - 1], 'MMM dd yyyy')}
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="red" />
