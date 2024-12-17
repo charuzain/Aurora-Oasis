@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useCheckIn } from '../../hooks/useCheckIn';
 import { useBookingDetails } from '../../hooks/useBookingDetails';
 import { HiMiniArrowLongLeft, HiMiniHomeModern } from 'react-icons/hi2';
-import { useCheckIn } from '../../hooks/useCheckIn';
 
 const CheckIn = () => {
   const { bookingId } = useParams();

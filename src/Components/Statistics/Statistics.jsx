@@ -21,11 +21,6 @@ const Statistics = ({ bookings, stays ,cabins}) => {
   const totalAvailableNights = cabins.length * days
 
   const occupancy = totalOccpiedNight / totalAvailableNights * 100;
-
-  // console.log(totalOccpiedNight)
-  // console.log(totalAvailableNights);
-  // console.log(occupancy )
-  
   
   return (
     <>
