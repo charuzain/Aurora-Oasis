@@ -14,7 +14,10 @@ export const useCheckIn = () => {
           data.status === 'checked-in' ? 'checked-in' : 'checked-out'
         } `
       );
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({
+        queryKey: ['bookings'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['today-activity'] });
     },
     onError: () => {
       toast.error('There was an error while checed in');

@@ -7,7 +7,6 @@ export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   let query = supabase
     .from('bookings')
     .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
-  console.log('query is ', query);
 
   if (filter !== 'all') {
     query = query.eq('status', filter);
@@ -25,12 +24,9 @@ export const fetchAllBookings = async (filter, sortQuery, pageNum) => {
   } = await query.order(sortField, {
     ascending: order === 'asc',
   });
-  console.log(count);
   if (error) {
     throw new Error('Bookings cant be fetched');
   }
-  console.log('-==');
-  console.log('booking');
   return { bookings, count };
 };
 
@@ -44,24 +40,16 @@ export const fetchBookingById = async (id) => {
   if (error) {
     throw new Error(`Booking with id ${id} cant be fetched`);
   }
-  console.log('booking ia', booking);
-  console.log(error);
-
   return booking;
 };
 
 export const updateCheckIn = async (newValue) => {
   const { id, ...updatedValue } = newValue;
-  console.log('---------');
-  console.log(id, updatedValue);
   const { data, error } = await supabase
     .from('bookings')
     .update({ ...updatedValue })
     .eq('id', id)
     .select();
-
-  console.log(data);
-
   if (error) {
     console.log(error);
     throw new Error('Problem checkin');
@@ -70,7 +58,6 @@ export const updateCheckIn = async (newValue) => {
 };
 
 export const deleteBooking = async (id) => {
-  console.log(id);
   const { data, error } = await supabase.from('bookings').delete().eq('id', id);
 
   if (error) {
@@ -81,7 +68,6 @@ export const deleteBooking = async (id) => {
 };
 
 export const GetBookingsAfterDate = async (date) => {
-  console.log(date);
   let { data, error } = await supabase
     .from('bookings')
     .select('*')
@@ -112,3 +98,47 @@ export const GetStayAfterDate = async (date) => {
   console.log(confirmedStay);
   return { confirmedStay, error };
 };
+
+
+
+export const getTodayActivity = async () => {
+  const currentDate = new Date();
+  currentDate.setUTCHours(0, 0, 0, 0); 
+  const today = currentDate.toISOString(); 
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*, guests(fullName, email,countryFlag,nationality)')
+    .or(
+      `and(status.eq.unconfirmed,startDate.eq.${today}),and(status.eq.checked-in,endDate.eq.${today})`
+    )
+    .order('created_at');
+
+  if (error) {
+    console.log(error);
+    throw new Error('Error fetching today activities');
+  }
+
+  console.log(data);
+
+  return data;
+};
+
+
+
+
+export const today = async() => {
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*, cabins(name), guests(fullName, email)')
+    .or(
+      `and(startDate.eq.${today}),and(endDate.eq.${today})`).order("created_at")
+  
+  if (error) {
+    console.log(error);
+    throw new Error('Error fetching today activities');
+  }
+
+  console.log(data);
+
+  return data;
+}

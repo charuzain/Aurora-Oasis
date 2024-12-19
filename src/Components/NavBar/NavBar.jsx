@@ -6,6 +6,7 @@ import { HiOutlineUsers } from 'react-icons/hi2';
 import { HiOutlineCog6Tooth } from 'react-icons/hi2';
 import logo from '../../assets/aurora.svg';
 import './NavBar.scss';
+import Uploader from '../../data/Uploader';
 
 
 export const NavBar = () => {
@@ -46,6 +47,7 @@ export const NavBar = () => {
           </Link>
         </li>
       </ul>
+      <Uploader/>
     </>
   );
 };

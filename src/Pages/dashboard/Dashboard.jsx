@@ -3,28 +3,31 @@ import { useBookingAfterDate } from '../../hooks/useBookingAfterDate';
 import { useStayAfterDate } from '../../hooks/useStayAfterDate';
 import DashBoardLayout from '../../Components/DashBoardLayout/DashBoardLayout';
 import { useCabin } from '../../hooks/useCabins';
+import { useTodayActivity } from '../../hooks/useTodayActivity';
 
 const Dashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isPending, isError,data, error } = useBookingAfterDate();
 
-  const {
-    isStaysPending,
-    isStaysError,
-    staysData,
-    staysError,
-  } = useStayAfterDate()
+  const { isPending, isError, data, error } = useBookingAfterDate();
+
+  const { isStaysPending, isStaysError, staysData, staysError } =
+    useStayAfterDate();
+  
+  const { todayActivities, isTodayActivityPending } = useTodayActivity();
 
   const updateFilterParams = (value) => {
     searchParams.set('last', value);
     setSearchParams(searchParams);
   };
 
-  const { cabins, isPending:isCabinsLoading} = useCabin();
+  const { cabins, isPending: isCabinsLoading } = useCabin();
 
-
-  console.log(isPending);
-  if (isPending || isStaysPending || isCabinsLoading) {
+  if (
+    isPending ||
+    isStaysPending ||
+    isTodayActivityPending ||
+    isCabinsLoading
+  ) {
     return <h1>Loading...</h1>;
   }
 
@@ -32,12 +35,13 @@ const Dashboard = () => {
     return <span>Error: {error.message || staysError.message}</span>;
   }
 
- 
   if (!isStaysPending && staysData) {
-    console.log(staysData.confirmedStay)
-    console.log(data.data)
-    const confirmedStay  = staysData.confirmedStay;
-    console.log('Confirmed Stays:', confirmedStay);
+    console.log(todayActivities);
+    // console.log(staysData.confirmedStay);
+    // console.log(data.data);
+    // const confirmedStay = staysData.confirmedStay;
+    // console.log('Confirmed Stays:', confirmedStay);
+    // // console.log(todayActivity);
   }
 
   return (

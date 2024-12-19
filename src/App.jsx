@@ -14,15 +14,24 @@ import CheckIn from './Pages/CheckIn/CheckIn';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import SignUp from './Pages/Signup/SignUp';
 import UserAccount from './Pages/UserAccount/UserAccount';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallBack from './Components/ErrorFallBack/ErrorFallBack';
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
       element: (
-        <ProtectedRoute>
-          <AppLayout />
-        </ProtectedRoute>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallBack}
+          onReset={() => {
+            window.location.replace('/')
+          }}
+        >
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        </ErrorBoundary>
       ),
       children: [
         {
