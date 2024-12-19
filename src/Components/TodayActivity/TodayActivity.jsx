@@ -1,11 +1,16 @@
+import { useCheckIn } from '../../hooks/useCheckIn';
 import { useTodayActivity } from '../../hooks/useTodayActivity';
+import { Link } from 'react-router-dom';
 
 const TodayActivity = () => {
   const { todayActivities, isTodayActivityPending } = useTodayActivity();
+  const mutation = useCheckIn();
 
   if (isTodayActivityPending) {
     return <p>Loading...</p>;
   }
+
+  console.log(todayActivities);
   return (
     <>
       <h2>Today</h2>
@@ -29,9 +34,22 @@ const TodayActivity = () => {
                 <p>{activity.guests.fullName}</p>
               </div>
               <p>{activity.numNights} nights</p>
-              <button>
-                {activity.status === 'checked-in' ? 'CHECK OUT' : 'Check In'}
-              </button>
+              {activity.status === 'checked-in' && (
+                <button
+                  onClick={() => {
+                    mutation.mutate({
+                      id: activity.id,
+                      status: 'checked-out',
+                    });
+                  }}
+                >
+                  CHECK OUT
+                </button>
+              )}
+
+              {activity.status === 'unconfirmed' && (
+                <Link to={`/checkin/${activity.id}`}>Check In</Link>
+              )}
             </>
           ))}
         </section>
