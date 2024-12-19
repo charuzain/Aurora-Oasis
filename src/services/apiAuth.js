@@ -42,6 +42,7 @@ export const logoutUser = async () => {
 };
 
 export const signUp = async ({ email, password, fullName }) => {
+  const { data: savedSessionData } = await supabase.auth.getSession();
   let { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -52,16 +53,22 @@ export const signUp = async ({ email, password, fullName }) => {
       },
     },
   });
+  //If there was a previously authenticated user, restore their session
+  // This action should be placed right after signUp, otherwise the authError will stop the restore
+  if (savedSessionData) {
+    await supabase.auth.setSession(savedSessionData.session);
+  }
 
   if (error) {
     console.log(error);
     throw new Error(error.message);
   }
+
   return data;
 };
 
 export const updateUser = async ({ fullName, avatar, password }) => {
-  console.log(password)
+  console.log(password);
   let updatedData;
   // if password or full name update the user
   if (password) {

@@ -16,8 +16,9 @@ const Users = () => {
       toast.success('User created succesfully');
       navigate('/');
     },
-    onError: () => {
-      toast.error('There was an error creating new user');
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(error.message);
     },
   });
 
