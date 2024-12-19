@@ -186,7 +186,7 @@ const CheckIn = () => {
                isPaid: true,
              }); 
             }
-            navigate('/bookings')
+            navigate(-1)
           }}
           disabled={!confirmChecked}
         >

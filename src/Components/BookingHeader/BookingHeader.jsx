@@ -4,6 +4,7 @@ const BookingHeader = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const updateFilterParams = (value) => {
+    searchParams.set('page', 1)
     searchParams.set('status', value);
     setSearchParams(searchParams);
   };
